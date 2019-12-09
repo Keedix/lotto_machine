@@ -12,7 +12,7 @@ defmodule LottoMachineWeb.Router do
     pipe_through :api
 
     get("/users/:username/numbers", NumbersController, :get_numbers_by_username)
-    get("/users/:username/numbers/:type", NumbersController, :get_numbers_by_username)
+    get("/users/:username/numbers/:type", NumbersController, :get_numbers_by_username_and_type)
     post("/users/:username/numbers/:type", NumbersController, :create_numbers_by_username)
   end
 

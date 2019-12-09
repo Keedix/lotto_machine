@@ -5,21 +5,30 @@ defmodule LottoMachineWeb.NumbersController do
 
   alias LottoMachine.{Generator, Repo, Number}
 
-  def get_numbers_by_username(conn, %{"username" => username}) do
+  def get_numbers_by_username(conn, %{"username" => u} = params) do
     numbers =
-      username
-      |> Repo.get_user_numbers()
+      Number
+      |> Number.by_username(u)
+      |> Number.selected()
+      |> Number.maybe_sorted(params)
+      |> Number.limited(params)
+      |> Number.by_offset(params)
+      |> Repo.all()
 
     conn
     |> json(%{data: numbers})
   end
 
-  def get_numbers_by_username_and_type(conn, %{"username" => username, "type" => type}) do
-    # Validate user access
-
+  def get_numbers_by_username_and_type(conn, %{"username" => u, "type" => t} = params) do
     numbers =
-      username
-      |> Repo.get_user_numbers(type)
+      Number
+      |> Number.by_username(u)
+      |> Number.by_type(t)
+      |> Number.selected()
+      |> Number.maybe_sorted(params)
+      |> Number.limited(params)
+      |> Number.by_offset(params)
+      |> Repo.all()
 
     conn
     |> json(%{data: numbers})

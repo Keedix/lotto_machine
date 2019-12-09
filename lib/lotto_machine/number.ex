@@ -1,5 +1,8 @@
 defmodule LottoMachine.Number do
   use Ecto.Schema
+  import Ecto.Query
+
+  @salt Application.get_env(:lotto_machine, :salt)
 
   schema "lotto_numbers" do
     field :numbers, {:array, :integer}
@@ -19,5 +22,50 @@ defmodule LottoMachine.Number do
     number
     |> changeset()
     |> Ecto.Changeset.fetch_field!(:numbers)
+  end
+
+  def by_username(query, username) do
+    user_hash =
+      username
+      |> Bcrypt.Base.hash_password(@salt)
+
+    from(n in query, where: n.user_hash == ^user_hash)
+  end
+
+  def by_type(query, type) do
+    from(n in query, where: n.type == ^type)
+  end
+
+  def selected(query) do
+    from(n in query, select: %{inserted_at: n.inserted_at, numbers: n.numbers, type: n.type})
+  end
+
+  def maybe_sorted(query, params) do
+    case Map.get(params, "sort") do
+      "desc" ->
+        from(n in query, order_by: [desc: n.inserted_at])
+
+      "asc" ->
+        from(n in query, order_by: [asc: n.inserted_at])
+
+      _ ->
+        query
+    end
+  end
+
+  def limited(query, params) do
+    limit = Map.get(params, "limit", "10") |> String.to_integer()
+
+    from(n in query, limit: ^limit)
+  end
+
+  def by_offset(query, params) do
+    case Map.get(params, "offset") do
+      nil ->
+        query
+
+      offset ->
+        from(n in query, offset: ^offset)
+    end
   end
 end

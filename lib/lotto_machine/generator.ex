@@ -1,19 +1,20 @@
 defmodule LottoMachine.Generator do
-  @type game :: atom()
+  @callback generate() :: [integer()]
+
+  @type game() :: atom()
+
+  @generators Application.get_env(:lotto_machine, :generators)
 
   @spec generate(game()) :: [integer()]
-  def generate(:lotto) do
-    generate_numbers(6, 49)
+  def generate(type) do
+    {_, module} = Enum.find(@generators, fn {t, _} -> type == t end)
+    :erlang.apply(module, :generate, [])
   end
 
-  def generate(:multi_multi) do
-    generate_numbers(10, 80)
-  end
+  def generate_numbers(count, max_numbers, acc \\ [])
+  def generate_numbers(0, _, acc), do: acc
 
-  defp generate_numbers(count, max_numbers, acc \\ [])
-  defp generate_numbers(0, _, acc), do: acc
-
-  defp generate_numbers(count, max_number, acc) do
+  def generate_numbers(count, max_number, acc) do
     new_acc = [Enum.random(1..max_number) | acc]
     generate_numbers(count - 1, max_number, new_acc)
   end

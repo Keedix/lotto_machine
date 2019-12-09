@@ -8,7 +8,12 @@
 use Mix.Config
 
 config :lotto_machine,
-  ecto_repos: [LottoMachine.Repo]
+  ecto_repos: [LottoMachine.Repo],
+  salt: "$2b$12$jyA5aAwdfJN3CLyKAb.dje",
+  generators: [
+    {:lotto, LottoMachine.Generator.Lotto},
+    {:multi_multi, LottoMachine.Generator.MultiMulti}
+  ]
 
 # Configures the endpoint
 config :lotto_machine, LottoMachineWeb.Endpoint,

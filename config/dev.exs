@@ -16,6 +16,7 @@ config :lotto_machine, LottoMachine.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :lotto_machine, LottoMachineWeb.Endpoint,
+  url: [host: "10.10.4.211"],
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,

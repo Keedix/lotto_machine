@@ -3,7 +3,7 @@ defmodule LottoMachine.Repo.Migrations.AddNumbers do
 
   def change do
     create table("lotto_numbers") do
-      add :numbers, :list
+      add :numbers, {:array, :integer}
       add :type, :string, size: 50
       add :user_hash, :string
 

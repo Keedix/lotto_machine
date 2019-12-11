@@ -1,6 +1,12 @@
 name: Elixir CI
 
-on: push
+on: 
+  push:
+    branches: 
+      - master
+  pull_request:
+    branches: 
+      - master
 
 jobs:
   build:
@@ -17,5 +23,7 @@ jobs:
         mix local.rebar --force
         mix local.hex --force
         mix deps.get
+    - name: Compile deps
+      run: mix deps.compile
     - name: Run Tests
       run: mix test

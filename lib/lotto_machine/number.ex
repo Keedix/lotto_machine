@@ -2,7 +2,8 @@ defmodule LottoMachine.Number do
   use Ecto.Schema
   import Ecto.Query
 
-  @salt Application.get_env(:lotto_machine, :salt)
+  @bcrypt Application.get_env(:lotto_machine, :bcrypt)
+  @timestamps_opts [type: :utc_datetime]
 
   schema "lotto_numbers" do
     field :numbers, {:array, :integer}
@@ -27,7 +28,7 @@ defmodule LottoMachine.Number do
   def by_username(query, username) do
     user_hash =
       username
-      |> Bcrypt.Base.hash_password(@salt)
+      |> @bcrypt.hash()
 
     from(n in query, where: n.user_hash == ^user_hash)
   end

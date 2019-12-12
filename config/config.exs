@@ -9,6 +9,7 @@ use Mix.Config
 
 config :lotto_machine,
   ecto_repos: [LottoMachine.Repo],
+  bcrypt: LottoMachine.Bcrypt,
   salt: "$2b$12$jyA5aAwdfJN3CLyKAb.dje",
   generators: [
     {:lotto, LottoMachine.Generator.Lotto},

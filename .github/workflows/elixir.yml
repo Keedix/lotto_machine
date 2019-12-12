@@ -17,7 +17,6 @@ jobs:
       image: elixir:1.9.4-alpine
       env:
         MIX_ENV: test
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     services:
       postgres:
@@ -41,3 +40,4 @@ jobs:
         mix coveralls.github
       env:
         DB_HOST: postgres
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

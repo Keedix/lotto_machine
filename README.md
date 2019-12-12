@@ -1,4 +1,4 @@
-https://github.com/Keedix/lotto_machine/workflows/Elixir%20CI/badge.svg
+![](https://github.com/Keedix/lotto_machine/workflows/Elixir%20CI/badge.svg)
 
 # LottoMachine
 

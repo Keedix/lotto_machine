@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install Alpine Deps
-      run: apk add --update openssl ncurses-libs build-base --no-cache
+      run: apk add --update openssl ncurses-libs build-base git --no-cache
     - name: Install Hex
       run: |
         mix local.rebar --force

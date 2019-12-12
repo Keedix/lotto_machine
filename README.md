@@ -1,4 +1,4 @@
-![](https://github.com/Keedix/lotto_machine/workflows/Elixir%20CI/badge.svg)
+![](https://github.com/Keedix/lotto_machine/workflows/Elixir%20CI/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/Keedix/lotto_machine/badge.svg)](https://coveralls.io/github/Keedix/lotto_machine)
 
 # LottoMachine
 

@@ -35,6 +35,8 @@ jobs:
     - name: Get and Compile deps
       run: mix do deps.get, deps.compile
     - name: Run Tests
-      run: mix test
+      run: |
+        mix test
+        mix coveralls 
       env:
         DB_HOST: postgres

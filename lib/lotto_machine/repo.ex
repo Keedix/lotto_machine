@@ -4,12 +4,11 @@ defmodule LottoMachine.Repo do
     adapter: Ecto.Adapters.Postgres
 
   alias LottoMachine.Number
-  import Ecto.Query, only: [from: 2]
 
-  @salt Application.get_env(:lotto_machine, :salt)
+  @bcrypt Application.get_env(:lotto_machine, :bcrypt)
 
   def insert_generated_numbers(numbers, username, type) do
-    user_hash = Bcrypt.Base.hash_password(username, @salt)
+    user_hash = @bcrypt.hash(username)
 
     %Number{
       user_hash: user_hash,

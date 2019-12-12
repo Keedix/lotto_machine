@@ -16,3 +16,7 @@ config :lotto_machine, LottoMachineWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :lotto_machine,
+  bcrypt: LottoMachine.BcryptMock,
+  generators: [{:test_gen, LottoMachine.Generator.TestGen}]

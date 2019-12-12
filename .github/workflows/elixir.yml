@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install Alpine Deps
-      run: apk add --update openssl ncurses-libs build-base --no-cache
+      run: apk add --update openssl ncurses-libs build-base git --no-cache
     - name: Install Hex
       run: |
         mix local.rebar --force
@@ -37,6 +37,7 @@ jobs:
     - name: Run Tests
       run: |
         mix test
-        mix coveralls 
+        mix coveralls.github
       env:
         DB_HOST: postgres
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

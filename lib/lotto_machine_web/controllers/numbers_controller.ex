@@ -5,6 +5,8 @@ defmodule LottoMachineWeb.NumbersController do
 
   alias LottoMachine.{Generator, Repo, Number}
 
+  import LottoMachine, only: [create_rsp_body: 1]
+
   def get_numbers_by_username(conn, %{"username" => u} = params) do
     numbers =
       Number
@@ -16,7 +18,7 @@ defmodule LottoMachineWeb.NumbersController do
       |> Repo.all()
 
     conn
-    |> json(%{data: numbers})
+    |> json(create_rsp_body(numbers))
   end
 
   def get_numbers_by_username_and_type(conn, %{"username" => u, "type" => t} = params) do
@@ -31,7 +33,7 @@ defmodule LottoMachineWeb.NumbersController do
       |> Repo.all()
 
     conn
-    |> json(%{data: numbers})
+    |> json(create_rsp_body(numbers))
   end
 
   def create_numbers_by_username(conn, %{"username" => username, "type" => type}) do
@@ -45,7 +47,7 @@ defmodule LottoMachineWeb.NumbersController do
         Logger.debug(fn -> "Successfully inserted data #{inspect(data)}" end)
 
         conn
-        |> json(%{data: %{numbers: numbers}})
+        |> json(create_rsp_body(%{numbers: numbers}))
 
       {:error, changeset} ->
         Logger.error("Failed to add new generated numbers: #{inspect(changeset)}")
@@ -54,5 +56,17 @@ defmodule LottoMachineWeb.NumbersController do
         |> put_status(500)
         |> json(%{error: %{type: "Internal Server Error"}})
     end
+  end
+
+  def get_numbers_types(conn, params) do
+    types =
+      Number
+      |> Number.distinct()
+      |> Number.select_type()
+      |> Number.maybe_sorted(params)
+      |> Repo.all()
+
+    conn
+    |> json(create_rsp_body(%{types: types}))
   end
 end

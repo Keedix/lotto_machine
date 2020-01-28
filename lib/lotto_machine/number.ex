@@ -42,15 +42,36 @@ defmodule LottoMachine.Number do
   end
 
   def maybe_sorted(query, params) do
-    case Map.get(params, "sort") do
+    [subject, direction] = maybe_parse_sort(params)
+
+    case direction do
       "desc" ->
-        from(n in query, order_by: [desc: n.inserted_at])
+        from(n in query, order_by: [desc: ^subject])
 
       "asc" ->
-        from(n in query, order_by: [asc: n.inserted_at])
+        from(n in query, order_by: [asc: ^subject])
 
-      _ ->
+      nil ->
         query
+    end
+  end
+
+  def maybe_parse_sort(params) do
+    case Map.get(params, "sort", nil) do
+      nil ->
+        [nil, nil]
+
+      string ->
+        splitted = String.split(string, " ")
+
+        if length(splitted) != 2 do
+          [nil, nil]
+        else
+          [
+            splitted |> List.first() |> String.to_atom(),
+            splitted |> List.last()
+          ]
+        end
     end
   end
 
@@ -68,5 +89,13 @@ defmodule LottoMachine.Number do
       offset ->
         from(n in query, offset: ^offset)
     end
+  end
+
+  def distinct(query) do
+    from(n in query, distinct: true)
+  end
+
+  def select_type(query) do
+    from(n in query, select: n.type)
   end
 end

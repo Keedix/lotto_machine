@@ -3,32 +3,17 @@ defmodule LottoMachineWeb.NumbersController do
 
   require Logger
 
-  alias LottoMachine.{Generator, Repo, Number}
+  alias LottoMachine.{Generator, Repo, Numbers}
 
-  def get_numbers_by_username(conn, %{"username" => u} = params) do
-    numbers =
-      Number
-      |> Number.by_username(u)
-      |> Number.selected()
-      |> Number.maybe_sorted(params)
-      |> Number.limited(params)
-      |> Number.by_offset(params)
-      |> Repo.all()
+  def get_numbers_by_username(conn, %{"username" => username} = params) do
+    numbers = Numbers.all_by_username(username, params)
 
     conn
     |> json(%{data: numbers})
   end
 
   def get_numbers_by_username_and_type(conn, %{"username" => u, "type" => t} = params) do
-    numbers =
-      Number
-      |> Number.by_username(u)
-      |> Number.by_type(t)
-      |> Number.selected()
-      |> Number.maybe_sorted(params)
-      |> Number.limited(params)
-      |> Number.by_offset(params)
-      |> Repo.all()
+    numbers = Numbers.all_by_username_and_type(u, t, params)
 
     conn
     |> json(%{data: numbers})
